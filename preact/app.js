@@ -9,7 +9,7 @@ class Query extends Component {
 
 	render({ query, elapsed, formatElapsed, elapsedClassName }) {
 		return (
-			<td class={'Query '+elapsedClassName}>
+			<td class={elapsedClassName}>
 				{ formatElapsed || ' ' }
 				<div class="popover left">
 					<div class="popover-content">{ query }</div>
@@ -60,12 +60,17 @@ class DBMon extends Component {
 		databases: []
 	};
 
+	constructor() {
+		super();
+		this.loadSamples = ::this.loadSamples;
+	}
+
 	loadSamples() {
+		Monitoring.renderRate.ping();
 		this.setState({
 			databases: ENV.generateData(true).toArray()
 		});
-		Monitoring.renderRate.ping();
-		setTimeout(::this.loadSamples, ENV.timeout);
+		setTimeout(this.loadSamples, ENV.timeout);
 	}
 
 	componentDidMount() {

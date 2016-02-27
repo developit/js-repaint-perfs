@@ -21,7 +21,7 @@
         }, Query.prototype.render = function(_ref2) {
             var query = _ref2.query, formatElapsed = (_ref2.elapsed, _ref2.formatElapsed), elapsedClassName = _ref2.elapsedClassName;
             return h("td", {
-                "class": "Query " + elapsedClassName
+                "class": elapsedClassName
             }, formatElapsed || " ", h("div", {
                 "class": "popover left"
             }, h("div", {
@@ -56,14 +56,14 @@
         }, Database;
     }(Component), DBMon = function(_Component3) {
         function DBMon() {
-            _Component3.apply(this, arguments), this.state = {
+            _Component3.call(this), this.state = {
                 databases: []
-            };
+            }, this.loadSamples = this.loadSamples.bind(this);
         }
         return _inherits(DBMon, _Component3), DBMon.prototype.loadSamples = function() {
-            this.setState({
+            Monitoring.renderRate.ping(), this.setState({
                 databases: ENV.generateData(!0).toArray()
-            }), Monitoring.renderRate.ping(), setTimeout(this.loadSamples.bind(this), ENV.timeout);
+            }), setTimeout(this.loadSamples, ENV.timeout);
         }, DBMon.prototype.componentDidMount = function() {
             this.loadSamples();
         }, DBMon.prototype.renderDatabase = function(database) {
